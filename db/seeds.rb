@@ -7,19 +7,23 @@
 #   Character.create(name: 'Luke', movie: movies.first)
 
 news_api_key = CONFIG[:news_api_key]
+$categories = ["business", "entertainemnt", "health", "science", "sports", "technology"]
 
-newsapi = News.new(news_api_key)
+$newsapi = News.new(news_api_key)
 
-articles = newsapi.get_top_headlines(country: "us", pageSize: 100)
-
-articles.each do |article|
-  Article.create(source: article.id,
-                 source_name: article.name,
-                 author: article.author,
-                 title: article.title,
-                 description: article.description,
-                 content: article.content,
-                 url: article.url,
-                 url_to_image: article.urlToImage,
-                 published_at: article.publishedAt)
+def make_articles(category)
+  articles = $newsapi.get_top_headlines(country: "us", category: category, pageSize: 100)
+  articles.each do |article|
+    Article.create(source: article.id,
+                   source_name: article.name,
+                   author: article.author,
+                   title: article.title,
+                   description: article.description,
+                   content: article.content,
+                   url: article.url,
+                   url_to_image: article.urlToImage,
+                   published_at: article.publishedAt)
+  end
 end
+
+$categories.each { |category| make_articles(category) }

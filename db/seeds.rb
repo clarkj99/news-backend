@@ -7,12 +7,12 @@
 #   Character.create(name: 'Luke', movie: movies.first)
 
 news_api_key = CONFIG[:news_api_key]
-$categories = ["business", "entertainemnt", "health", "science", "sports", "technology"]
+$categories = ["business", "entertainment", "health", "science", "sports", "technology"]
 
 $newsapi = News.new(news_api_key)
 
 def make_articles(category)
-  articles = $newsapi.get_top_headlines(country: "us", category: category, pageSize: 100)
+  articles = $newsapi.get_top_headlines(country: "us", category: category.name, pageSize: 100)
   articles.each do |article|
     Article.create(source: article.id,
                    source_name: article.name,
@@ -22,8 +22,13 @@ def make_articles(category)
                    content: article.content,
                    url: article.url,
                    url_to_image: article.urlToImage,
-                   published_at: article.publishedAt)
+                   published_at: article.publishedAt,
+                   category: category)
   end
+  puts "  created category #{category.name}, #{Article.all.count} articles total"
 end
 
-$categories.each { |category| make_articles(category) }
+$categories.each do |category|
+  cat = Category.create(name: category)
+  make_articles(cat)
+end

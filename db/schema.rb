@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_11_28_053240) do
+ActiveRecord::Schema.define(version: 2019_11_30_050939) do
 
   create_table "articles", force: :cascade do |t|
     t.string "source"
@@ -20,10 +20,19 @@ ActiveRecord::Schema.define(version: 2019_11_28_053240) do
     t.string "description"
     t.string "url"
     t.string "url_to_image"
-    t.date "published_at"
+    t.datetime "published_at"
     t.text "content"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.integer "category_id"
+    t.index ["category_id"], name: "index_articles_on_category_id"
+  end
+
+  create_table "categories", force: :cascade do |t|
+    t.string "name"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
   end
 
+  add_foreign_key "articles", "categories"
 end

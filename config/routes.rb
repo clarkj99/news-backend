@@ -1,5 +1,12 @@
 Rails.application.routes.draw do
-  resources :categories
-  resources :articles
-  # For details on the DSL available within this file, see https://guides.rubyonrails.org/routing.html
+  resources :categories, only: [:index, :show] do
+    resources :articles, only: [:index]
+  end
+  resources :articles, only: [:index, :show]
+
+  resources :countries, only: [:index, :show] do
+    resources :categories, only: [:index, :show] do
+      resources :articles, only: [:index]
+    end
+  end
 end

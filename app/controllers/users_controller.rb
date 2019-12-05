@@ -3,11 +3,16 @@ class UsersController < ApplicationController
 
   def index
     users = User.all
-    render json: users, include: :articles
+    render json: users, include: [:articles, :favorites]
   end
 
   def show
-    render json: user, include: :articles
+    if params[:id]
+      @user = User.find_by(id: params[:id])
+    else
+      @user = User.find_by(user_params[:username].strip)
+    end
+    render json: @user, include: [:articles, :favorites]
   end
 
   def create
@@ -25,22 +30,12 @@ class UsersController < ApplicationController
   end
 
   def update
-    # get article
-    article = Article.find_by(id: user_params[:article_id])
-
-    # create favorite
-    favorite = Favorite.create(user: @user, article: article)
-    if favorite.valid?
-      render json: @user.favorites
-    else
-      render json: { status: 899, message: favorite.errors.full_messages[0] }
-    end
   end
 
   private
 
   def find_user
-    @user = User.find_by(username: user_params[:username].strip)
+    @user = User.find_by(username: params[:id] || user_params[:username].strip)
   end
 
   def user_params

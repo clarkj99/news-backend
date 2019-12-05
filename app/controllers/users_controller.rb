@@ -25,10 +25,15 @@ class UsersController < ApplicationController
   end
 
   def update
-    if user.update(user_params)
-      #   redirect_to user_path(@user)
+    # get article
+    article = Article.find_by(id: user_params[:article_id])
+
+    # create favorite
+    favorite = Favorite.create(user: @user, article: article)
+    if favorite.valid?
+      render json: @user.favorites
     else
-      #   render :edit
+      render json: { status: 899, message: favorite.errors.full_messages[0] }
     end
   end
 
@@ -39,6 +44,6 @@ class UsersController < ApplicationController
   end
 
   def user_params
-    params.require(:user).permit(:username)
+    params.require(:user).permit(:username, :article_id)
   end
 end

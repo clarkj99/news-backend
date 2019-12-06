@@ -1,5 +1,5 @@
 class FavoritesController < ApplicationController
-  before_action :find_favorite, only: [:show, :edit, :delete, :update]
+  before_action :find_favorite, only: [:show, :edit, :destroy, :update]
 
   def index
     @favorites = Favorite.all
@@ -21,6 +21,7 @@ class FavoritesController < ApplicationController
 
   def destroy
     @favorite.destroy
+    render json: @favorite
   end
 
   def find_favorite

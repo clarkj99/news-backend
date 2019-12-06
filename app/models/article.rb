@@ -3,6 +3,6 @@ class Article < ApplicationRecord
   belongs_to :country
   has_many :favorites
   has_many :users, through: :favorites
-  validates :title, uniqueness: { scope: :source_name,
-                                  message: "should be unique for source" }
+  validates :title, uniqueness: { scope: :country_id,
+                                  message: "should be unique for country" }
 end

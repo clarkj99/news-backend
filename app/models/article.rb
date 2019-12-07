@@ -1,8 +1,8 @@
 class Article < ApplicationRecord
-  belongs_to :category
-  belongs_to :country
+  has_many :articles_categories
+  has_many :categories, through: :articles_categories
+  has_many :articles_countries
+  has_many :countries, through: :articles_countries
   has_many :favorites
   has_many :users, through: :favorites
-  validates :title, uniqueness: { scope: :country_id,
-                                  message: "should be unique for country" }
 end

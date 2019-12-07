@@ -9,25 +9,26 @@
 news_api_key = CONFIG[:news_api_key]
 $categories = ["business", "entertainment", "health", "science", "sports", "technology"]
 
-$countries = [{ code: "au", name: "Australia" }, { code: "mx", name: "Mexico" }]
-# $countries = [{ code: "au", name: "Australia" }, { code: "ca", name: "Canada" }, { code: "jp", name: "Japan" }, { code: "gb", name: "Great Britain" }, { code: "ie", name: "Ireland" }, { code: "in", name: "India" }, { code: "my", name: "Malaysia" }, { code: "mx", name: "Mexico" }, { code: "nz", name: "New Zealand" }, { code: "ng", name: "Nigeria" }, { code: "ph", name: "Phillipines" }, { code: "sg", name: "Singapour" }, { code: "ae", name: "UAE" }, { code: "us", name: "United States" }, { code: "za", name: "South Africa" }]
+# $countries = [{ code: "au", name: "Australia" }, { code: "mx", name: "Mexico" }]
+$countries = [{ code: "au", name: "Australia" }, { code: "ca", name: "Canada" }, { code: "jp", name: "Japan" }, { code: "gb", name: "Great Britain" }, { code: "ie", name: "Ireland" }, { code: "in", name: "India" }, { code: "my", name: "Malaysia" }, { code: "mx", name: "Mexico" }, { code: "nz", name: "New Zealand" }, { code: "ng", name: "Nigeria" }, { code: "ph", name: "Phillipines" }, { code: "sg", name: "Singapour" }, { code: "ae", name: "UAE" }, { code: "us", name: "United States" }, { code: "za", name: "South Africa" }]
 
 $newsapi = News.new(news_api_key)
 
 def make_articles(category, country)
   articles = $newsapi.get_top_headlines(country: country.code, category: category.name, pageSize: 100)
   articles.each do |article|
-    Article.create(source: article.id,
-                   source_name: article.name,
-                   author: article.author,
-                   title: article.title,
-                   description: article.description,
-                   content: article.content,
-                   url: article.url,
-                   url_to_image: article.urlToImage,
-                   published_at: article.publishedAt,
-                   country: country,
-                   category: category)
+    newArticle = Article.create_or_find_by(source: article.id,
+                                           source_name: article.name,
+                                           author: article.author,
+                                           title: article.title,
+                                           description: article.description,
+                                           content: article.content,
+                                           url: article.url,
+                                           url_to_image: article.urlToImage,
+                                           published_at: article.publishedAt)
+
+    ArticlesCategory.create(article: newArticle, category: category)
+    ArticlesCountry.create(article: newArticle, country: country)
   end
   puts "Country #{country.name}, Category #{category.name}, #{Article.all.count} articles total"
 end

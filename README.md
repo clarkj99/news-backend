@@ -1,24 +1,35 @@
-# README
+# camelCaseNewsNetwork - Ruby on Rails Backend
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+The camelCaseNewsNetwork is an image based news browser created with vanilla Javascript and Ruby on Rails.
 
-Things you may want to cover:
+## API
 
-* Ruby version
+This project consumes data supplied by the newsapi.org API. It uses the free version of the API, which limits the number of daily requests and the number of records returned from a request.
 
-* System dependencies
+Request are made through the accompanying Ruby on Rails backend.
 
-* Configuration
+## Models
 
-* Database creation
+- articles
+- categories
+- countries
+- favorites
+- users
 
-* Database initialization
+## Seed Data
 
-* How to run the test suite
+This project requires a seeded database to run properly. Be sure to include credentials for newsapi.org and run `rails db:seed`.
 
-* Services (job queues, cache servers, search engines, etc.)
+## Credentials
 
-* Deployment instructions
+The newsapi.org API requests require a key. Be sure to add it to config/config.rb. It should look like this:
 
-* ...
+```
+CONFIG = {
+    news_api_key: "abcdeabceeabcdeadbceadbce12"
+ }
+```
+
+## License
+
+<a rel="license" href="http://creativecommons.org/licenses/by/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by/4.0/88x31.png" /></a><br /><span xmlns:dct="http://purl.org/dc/terms/" property="dct:title">camelCaseNewsNetwork</span> by <span xmlns:cc="http://creativecommons.org/ns#" property="cc:attributionName">Clark Johnson</span> is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by/4.0/">Creative Commons Attribution 4.0 International License</a>
